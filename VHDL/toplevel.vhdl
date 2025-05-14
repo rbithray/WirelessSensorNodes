@@ -1,62 +1,93 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
-use IEEE.STD_LOGIC_ARITH.ALL;
-use IEEE.STD_LOGIC_UNSIGNED.ALL;
+use IEEE.NUMERIC_STD.ALL;
 
 entity toplevel is
-    Port (
-        clk     : in  STD_LOGIC;
-        sensor  : in  STD_LOGIC_VECTOR(7 downto 0);
-        comms   : out STD_LOGIC_VECTOR(7 downto 0)
+    port (
+        -- Clock signal
+        clock : in std_logic;
+
+        -- Sensor module
+        environment : in std_logic_vector(7 downto 0);
+        sensor_data : out std_logic_vector(7 downto 0);
+
+        -- Radio
+        Rx : in std_logic;
+        Tx : out std_logic;
+
+        -- PMU
+        PMU_data : in std_logic_vector(7 downto 0);
+
+        -- Memory
+        mem_data_out : out std_logic_vector(7 downto 0)
     );
 end toplevel;
 
 architecture Behavioral of toplevel is
 
-    -- Component declarations
-    component memory is
-        Port (
-            clk     : in  STD_LOGIC;
-            data_in : in  STD_LOGIC_VECTOR(7 downto 0);
-            data_out: out STD_LOGIC_VECTOR(7 downto 0)
-        );
-    end component;
-
-    component controller is
-        Port (
-            clk     : in  STD_LOGIC;
-            sensor  : in  STD_LOGIC_VECTOR(7 downto 0);
-            mem_data: in  STD_LOGIC_VECTOR(7 downto 0);
-            comms   : out STD_LOGIC_VECTOR(7 downto 0);
-            mem_wr  : out STD_LOGIC;
-            mem_in  : out STD_LOGIC_VECTOR(7 downto 0)
-        );
-    end component;
-
-    -- Signals for interconnection
-    signal mem_data_out : STD_LOGIC_VECTOR(7 downto 0);
-    signal mem_wr       : STD_LOGIC;
-    signal mem_data_in  : STD_LOGIC_VECTOR(7 downto 0);
+    -- Signals for interconnections
+    signal enable_sensor, enable_radio, enable_memory : std_logic;
+    signal write_mem : std_logic;
+    signal mem_addr : std_logic_vector(7 downto 0);
+    signal mem_data_in : std_logic_vector(7 downto 0);
+    signal radio_data : std_logic_vector(7 downto 0);
+    signal controller_mem_data : std_logic_vector(7 downto 0);
+    signal controller_mem_addr : std_logic_vector(7 downto 0);
+    signal controller_radio_tx : std_logic;
 
 begin
 
-    -- Instantiate memory
-    mem_inst : memory
-        Port map (
-            clk     => clk,
-            data_in => mem_data_in,
-            data_out=> mem_data_out
+    -- Sensor module instantiation
+    SensorModule_inst : entity work.SensorModule
+        port map (
+            environment => environment,
+            clock => clock,
+            enable => enable_sensor,
+            sensor_data => sensor_data
         );
 
-    -- Instantiate controller
-    ctrl_inst : controller
-        Port map (
-            clk     => clk,
-            sensor  => sensor,
-            mem_data=> mem_data_out,
-            comms   => comms,
-            mem_wr  => mem_wr,
-            mem_in  => mem_data_in
+    -- Radio instantiation
+    Radio_inst : entity work.Radio
+        port map (
+            Rx => Rx,
+            enable => enable_radio,
+            clock => clock,
+            Tx => Tx,
+            radio_data => radio_data
+        );
+
+    -- Memory instantiation
+    Memory_inst : entity work.Memory
+        port map (
+            mem_addr => mem_addr,
+            mem_data => mem_data_in,
+            write_mem => write_mem,
+            clock => clock,
+            mem_data => mem_data_out
+        );
+
+    -- PMU instantiation
+    PMU_inst : entity work.PMU
+        port map (
+            PMU_data => PMU_data,
+            clock => clock,
+            enable => enable_sensor & enable_radio & enable_memory
+        );
+
+    -- Controller instantiation
+    Controller_inst : entity work.Controller
+        port map (
+            clock => clock,
+            enable => enable_sensor & enable_radio & enable_memory,
+            sensor_data => sensor_data,
+            memory_data => mem_data_out,
+            radio_data => radio_data,
+            write_to_memory => write_mem,
+            memory_data => controller_mem_data,
+            memory_address => controller_mem_addr,
+            radio_Tx => controller_radio_tx,
+            enables => enable_sensor & enable_radio & enable_memory,
+            PMU_data => PMU_data
         );
 
 end Behavioral;
