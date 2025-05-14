@@ -11,6 +11,9 @@ architecture Behavioral of clock is
 begin
     process
     begin
-        clock_out <= not clock_out after 10 ns; -- Toggle clock every 10 ns
+        clock_out <= '1'; -- Toggle clock every 10 ns
+        wait for 10 ns;
+        clock_out <= '0';
+        wait for 10 ns;
     end process;
 end Behavioral;
