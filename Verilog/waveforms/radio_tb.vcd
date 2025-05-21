@@ -1,3 +1,216 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:d1402ebd20fc6722c623c81a7e009768e545aed7a1f6e549d9301e32490202cc
-size 1199085
+$date
+	Wed May 21 18:55:24 2025
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ps
+$end
+$scope module radio_tb $end
+$var wire 8 ! rx_data [7:0] $end
+$var wire 1 " busy $end
+$var wire 1 # Tx $end
+$var reg 1 $ Rx $end
+$var reg 1 % clk $end
+$var reg 1 & enable $end
+$var reg 1 ' receive $end
+$var reg 1 ( send $end
+$var reg 8 ) tx_data [7:0] $end
+$scope module uut $end
+$var wire 1 $ Rx $end
+$var wire 1 " busy $end
+$var wire 1 % clk $end
+$var wire 1 & enable $end
+$var wire 1 ' receive $end
+$var wire 1 ( send $end
+$var wire 8 * tx_data [7:0] $end
+$var reg 1 # Tx $end
+$var reg 3 + rx_bit_cnt [2:0] $end
+$var reg 1 , rx_busy $end
+$var reg 8 - rx_data [7:0] $end
+$var reg 8 . rx_shift_reg [7:0] $end
+$var reg 3 / tx_bit_cnt [2:0] $end
+$var reg 1 0 tx_busy $end
+$var reg 8 1 tx_shift_reg [7:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+$comment Show the parameter values. $end
+$dumpall
+$end
+#0
+$dumpvars
+b0 1
+00
+b0 /
+b0 .
+bx -
+0,
+b0 +
+b0 *
+b0 )
+0(
+0'
+0&
+0%
+0$
+x#
+0"
+bx !
+$end
+#5000
+b0 !
+b0 -
+0#
+1%
+#10000
+0%
+b10101010 )
+b10101010 *
+1&
+#15000
+1%
+#20000
+0%
+#25000
+1%
+#30000
+0%
+1(
+#35000
+1"
+10
+b10101010 1
+1%
+#40000
+0%
+0(
+#45000
+b1 /
+b1010101 1
+1%
+#50000
+0%
+#55000
+b10 /
+b101010 1
+1#
+1%
+#60000
+0%
+#65000
+b11 /
+b10101 1
+0#
+1%
+#70000
+0%
+#75000
+b100 /
+b1010 1
+1#
+1%
+#80000
+0%
+#85000
+b101 /
+b101 1
+0#
+1%
+#90000
+0%
+#95000
+b110 /
+b10 1
+1#
+1%
+#100000
+0%
+#105000
+b111 /
+b1 1
+0#
+1%
+#110000
+0%
+#115000
+0"
+00
+b0 /
+b0 1
+1#
+1%
+#120000
+0%
+#125000
+0#
+1%
+#130000
+0%
+#135000
+1"
+1,
+1%
+1'
+#140000
+0%
+#145000
+b1 +
+1%
+#150000
+0%
+#155000
+b10 +
+b10000000 .
+1%
+1$
+#160000
+0%
+#165000
+b11 +
+b11000000 .
+1%
+#170000
+0%
+#175000
+b100 +
+b11100000 .
+1%
+#180000
+0%
+#185000
+b101 +
+b11110000 .
+1%
+#190000
+0%
+#195000
+b110 +
+b11111000 .
+1%
+#200000
+0%
+#205000
+b111 +
+b11111100 .
+1%
+#210000
+0%
+#215000
+0"
+0,
+b11111100 !
+b11111100 -
+b0 +
+b1111110 .
+1%
+0'
+0$
+#220000
+0%
+#225000
+1%
+#230000
+0%
+#235000
