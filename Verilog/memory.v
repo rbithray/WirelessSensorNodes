@@ -11,6 +11,7 @@ module memory(
 reg [7:0] mem [0:255]; // Memory array (256 bytes)
 integer i;
 
+
 always @(posedge clk) begin
     if (!rst_n) begin
         // Initialize memory to zero on reset
@@ -20,8 +21,10 @@ always @(posedge clk) begin
     end else if (read && !write) begin
         data_out <= mem[addr]; // Read data from memory
     end else
-    if (write) begin
+    if (write && !read) begin
         mem[addr] <= data_in; // Write data to memory
+    end else begin
+        data_out <= 8'b0; // Default output
     end
 end
 
