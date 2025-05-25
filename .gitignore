@@ -1,4 +1,19 @@
+# Ignore files without extensions
+*.
+
+# Ignore all dotfiles except .gitignore and .gitattributes
 .*
-*
-!/**/
-!*.*
+!.gitignore
+!.gitattributes
+
+# Ignore Sigasi project/configuration files
+.sigasi/
+*.project
+*.settings/
+*.metadata/
+.sigasi_workspace/
+.sigasi_db/
+.sigasi_tmp/
+.sigasi_cache/
+# Ignore Eclipse project files
+.classpath
