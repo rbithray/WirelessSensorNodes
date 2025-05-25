@@ -7,12 +7,12 @@ module sensor_tb;
     real environment = 0.0;
     wire [7:0] sensor_data;
 
-    // Instantiate the SensorModule
-    SensorModule uut (
+    // Instantiate the sensor
+    sensor uut (
         .environment(environment),
         .clk(clk),
         .enable(enable),
-        .data(sensordata)
+        .data(sensor_data)
     );
 
     // Clock generation
@@ -32,15 +32,15 @@ module sensor_tb;
         // Enable sensor and apply different environment values
         enable = 1;
 
-        environment = 0.0;   #10;
-        environment = 0.25;  #10;
-        environment = 0.5;   #10;
-        environment = 0.75;  #10;
-        environment = 1.0;   #10;
+        environment = 8'h00;   #10;
+        environment = 8'h0F;  #10;
+        environment = 8'h50;   #10;
+        environment = 8'h5F;  #10;
+        environment = 8'hFF;   #10;
 
         // Disable sensor
         enable = 0;
-        environment = 0.5;   #10;
+        environment = 8'b0;   #10;
 
         // End simulation
         $stop;
