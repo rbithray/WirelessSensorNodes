@@ -19,7 +19,7 @@ module sensor_tb;
     always #5 clk = ~clk; // 100 MHz clock
 
     initial begin
-        $dumpfile("waveforms/sensor.vcd");
+        $dumpfile("../waveforms/sensor.vcd");
         $dumpvars(0, sensor_tb);
         $monitor("Time: %0t | clk: %b | enable: %b | environment: %f | sensor_data: %b",
                  $time, clk, enable, environment, sensor_data);

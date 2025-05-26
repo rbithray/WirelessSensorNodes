@@ -33,7 +33,7 @@ module memory_tb;
 
     // Clock generation
     initial begin
-        $dumpfile("waveforms/memory.vcd");
+        $dumpfile("../waveforms/memory.vcd");
         $dumpvars(0, memory_tb);
         $monitor("Time: %0t | clk: %b | rst_n: %b | address: %h | data_in: %h | write_enable: %b | read_enable: %b | data_out: %h",
                  $time, clk, rst_n, address, data, write_enable, read_enable, data_out);
