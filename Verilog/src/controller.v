@@ -22,8 +22,8 @@ module controller(
     // State encoding
     parameter IDLE = 2'b00, 
               READ_SENSOR = 2'b01,
-              WRITE_MEMORY = 2'b10,
-              RADIO_COMM = 2'b11;
+              READ_RADIO = 2'b10,
+              WRITE_RADIO = 2'b11;
     reg [1:0] current_state, next_state;
      
 always_ff @(posedge clk) begin

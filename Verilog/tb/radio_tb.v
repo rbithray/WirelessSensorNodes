@@ -30,7 +30,7 @@ module radio_tb;
 
     initial begin
         // Dumpfile setup for waveform viewing
-        $dumpfile("../waveforms/radio.vcd");
+        $dumpfile("./Verilog/waveforms/radio.vcd");
         $dumpvars(0, radio_tb);
         $monitor("Time: %0t | clk: %b | enable: %b | send: %b | receive: %b | tx_data: %b | busy: %b | Tx: %b | Rx: %b | rx_data: %b",
                  $time, clk, enable, send, receive, tx_data, busy, Tx, Rx, rx_data);

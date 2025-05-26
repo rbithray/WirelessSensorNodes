@@ -28,7 +28,7 @@ module packetiser_tb;
     always #5 clk = ~clk;
 
     initial begin
-        $dumpfile("../waveforms/packetiser.vcd");
+        $dumpfile("./Verilog/waveforms/packetiser.vcd");
         $dumpvars(0, packetiser_tb);
 
         // Reset

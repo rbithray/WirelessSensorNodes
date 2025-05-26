@@ -35,13 +35,13 @@ select opt in "${modules[@]}"; do
         echo "Invalid option. Try again."
     fi
 done
-
-SRC_DIR="../src"
-TB_FILE="../tb/"$MODULE"_tb.v"
+HEAD_DIR="Verilog"
+SRC_DIR="./"$HEAD_DIR"/src"
+TB_FILE="./"$HEAD_DIR"/tb/"$MODULE"_tb.v"
 TOP_MODULE=$MODULE"_tb"
 OUT_DIR="./.build"
 OUT_FILE="$OUT_DIR/"$MODULE"_tb.out"
-VCD_DIR="../waveforms"
+VCD_DIR="./"$HEAD_DIR"/waveforms"
 
 # Create build directory if it doesn't exist
 mkdir -p "$OUT_DIR"
@@ -60,6 +60,9 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 echo "Simulation completed successfully. Output written to $OUT_FILE."
+
+rm -rf "$OUT_DIR" # Clean up the build directory
+mkdir -p "$VCD_DIR" # Create waveform directory if it doesn't exist
 
 $VCD_VIEWER "$VCD_DIR"/"$MODULE".vcd
 if [ $? -ne 0 ]; then
