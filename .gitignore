@@ -17,3 +17,4 @@
 .sigasi_cache/
 # Ignore Eclipse project files
 .classpath
+Verilog/radio_tb

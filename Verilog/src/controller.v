@@ -42,4 +42,5 @@ always_ff @(posedge clk) begin
     end else begin
         current_state <= next_state; // Transition to next state
     end
+end
 endmodule
