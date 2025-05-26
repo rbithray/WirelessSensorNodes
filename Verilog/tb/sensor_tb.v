@@ -43,7 +43,7 @@ module sensor_tb;
         environment = 8'b0;   #10;
 
         // End simulation
-        $stop;
+        $finish;
     end
 
 endmodule
