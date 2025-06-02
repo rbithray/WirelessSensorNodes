@@ -1,3 +1,12 @@
+// Module: Sensor
+
+/*
+    * This module now serves as an analogue for a sensor, to help test the control signalling.
+    * In its current form, this module is just an input buffer.
+    * The sensor can be enabled or disabled using an enable signal.
+    * The sensor operates on the rising edge of the clock signal.
+*/
+
 module sensor(
     input wire [7:0] environment,             // Analog input from the environment
     input wire clk,                      // Clock signal

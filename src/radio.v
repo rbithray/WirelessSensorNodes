@@ -1,3 +1,12 @@
+//Module: Radio
+
+/*    
+    * This module implements a simple radio interface for transmitting and receiving data.
+    * It supports an 8-bit data bus and operates on the rising edge of the clock signal.
+    * The radio can be enabled or disabled using an enable signal.
+    * The radio operates in two modes: transmit and receive, controlled by the send and receive signals.
+*/
+
 module radio(
     input  wire        clk,         // Clock signal
     input  wire        enable,      // Enable signal
@@ -6,8 +15,7 @@ module radio(
     output wire        busy,        // Indicates if the radio is busy
     input  wire        receive,     // Control signal from controller to trigger receive
     // Data transfer between controller and radio
-    input  wire [7:0]  tx_data,     // Data from controller to transmit
-    output reg [7:0]   rx_data,     // Data received, to controller
+    inout  wire [7:0]  data,     // Data from controller to transmit
     // Radio signals
     output reg         Tx,          // Output signal (to antenna)
     input  wire        Rx          // Input signal (from antenna)
@@ -17,15 +25,20 @@ module radio(
     // Transmit state
     reg [2:0] tx_bit_cnt = 0;
     reg [7:0] tx_shift_reg = 0;
+    reg [7:0] tx_data = 0; // Data to be transmitted
     reg       tx_busy = 0;
 
     // Receive state
     reg [2:0] rx_bit_cnt = 0;
     reg [7:0] rx_shift_reg = 0;
+    reg [7:0] rx_data = 0; // Data received
     reg       rx_busy = 0;
+
+
 
     // Assign busy signal based on transmit and receive states
     assign busy = tx_busy || rx_busy;
+    assign data = (receive && !send) ? rx_data : 8'bz;
 
     always @(posedge clk) begin
         if (!enable) begin

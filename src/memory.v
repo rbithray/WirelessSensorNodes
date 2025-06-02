@@ -1,3 +1,11 @@
+//Module: Memory 
+
+/*
+    * This module implements a simple memory with read and write capabilities.
+    * It supports 256 bytes of memory, with an 8-bit address and data bus.
+    * The memory can be accessed using read and write signals.
+ */
+
 module memory(
     input wire [7:0] addr,             // Memory address
     inout wire [7:0] data,             // Memory data in

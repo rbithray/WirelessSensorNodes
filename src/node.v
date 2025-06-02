@@ -1,10 +1,24 @@
-`timescale 1ns/1ps
+`include "memory.v"
+`include "sensor.v"
+`include "radio.v"
+`include "packetiser.v"
+
+// Module: Top-level module for the node
+
+/*
+    * This module serves as the top-level integration point for the system.
+    * It connects the sensor, memory, radio, and controller modules.
+    * The system operates based on a clock signal and a reset signal.
+    * It also includes an external environment input for the sensor.
+*/
 
 module toplevel(
     input  wire        clk,
     input  wire        rst_n,
     input  wire [7:0]  environment, // External environment input for sensor
     input  wire        enable      // Global enable
+    input  wire [2:0]  inst,        // Instruction signal for controller
+    output wire        busy,        // Busy signal to indicate controller is processing
 );
 
     // Sensor wires

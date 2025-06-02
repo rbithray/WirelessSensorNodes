@@ -23,7 +23,7 @@ fi
 
 # Set variables
 # read -p "Enter module name: " MODULE
-modules=("radio" "controller" "sensor" "memory" "packetiser" "toplevel")
+modules=("radio" "controller" "sensor" "memory" "packetiser" "node")
 
 echo "Select a module:"
 select opt in "${modules[@]}"; do
@@ -52,7 +52,9 @@ if [ $? -ne 0 ]; then
     echo "Synthesis failed."
     exit 1
 fi
+echo "Synthesis completed successfully. Output file: $OUT_FILE"
 
+# Run the simulation
 vvp "$OUT_FILE"
 
 if [ $? -ne 0 ]; then
@@ -64,7 +66,7 @@ echo "Simulation completed successfully. Output written to $OUT_FILE."
 rm -rf "$OUT_DIR" # Clean up the build directory
 mkdir -p "$VCD_DIR" # Create waveform directory if it doesn't exist
 
-$VCD_VIEWER "$VCD_DIR"/"$MODULE".vcd
+$VCD_VIEWER "$VCD_DIR"/"$MODULE"_tb.vcd
 if [ $? -ne 0 ]; then
     echo "Waveform viewer failed."
     exit 1
