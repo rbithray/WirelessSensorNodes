@@ -35,13 +35,13 @@ select opt in "${modules[@]}"; do
         echo "Invalid option. Try again."
     fi
 done
-HEAD_DIR="Verilog"
-SRC_DIR="./"$HEAD_DIR"/src"
-TB_FILE="./"$HEAD_DIR"/tb/"$MODULE"_tb.v"
+
+SRC_DIR="./src"
+TB_FILE="./tb/"$MODULE"_tb.v"
 TOP_MODULE=$MODULE"_tb"
 OUT_DIR="./.build"
 OUT_FILE="$OUT_DIR/"$MODULE"_tb.out"
-VCD_DIR="./"$HEAD_DIR"/waveforms"
+VCD_DIR="./waveforms"
 
 # Create build directory if it doesn't exist
 mkdir -p "$OUT_DIR"

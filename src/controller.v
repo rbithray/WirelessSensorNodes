@@ -1,21 +1,21 @@
 module controller(
     input  wire        clk,                 // Clock signal
     input  wire        enable,              // Enable signal
+    input  wire        inst,                // Instruction signal
     // Sensor signals
     input  wire [7:0]  sensor_data,         // Sensor data input
     input  wire        sensor_enable,       // Sensor enable signal
     // Memory signals
-    input  wire [7:0]  mem_data_in,         // Memory data input
-    output reg [7:0]   mem_data_out,        // Memory data output
-    output reg [7:0]   mem_address,      // Memory address output
-    output reg         mem_write,     // Write enable signal
-    output reg         mem_read,      // Read enable signal
+    inout  wire [7:0]  mem_data,         // Memory data input
+    output reg [7:0]   mem_address,         // Memory address output
+    output reg         mem_write,           // Write enable signal
+    output reg         mem_read,            // Read enable signal
     // Radio signals
     input  wire        radio_busy,          // Radio busy signal
     output reg         radio_send,          // Control signal to radio for transmit
     output reg         radio_receive,       // Control signal to radio for receive 
-    inout  wire [7:0]  radio_data,       // Data received from 
-    output reg        radio_enable         // Radio enable signal
+    inout  wire [7:0]  radio_data,          // Data received from 
+    output reg        radio_enable          // Radio enable signal
 
 );
 
@@ -41,6 +41,8 @@ always_ff @(posedge clk) begin
         current_state <= IDLE; // Reset state
     end else begin
         current_state <= next_state; // Transition to next state
+        case
+        next_state <= inst; // set next state based on instruction
     end
 end
 endmodule
