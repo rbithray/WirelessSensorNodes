@@ -51,12 +51,12 @@ if not defined MODULE (
 echo You selected: %MODULE%
 
 :: Set paths
-set "SRC_DIR=..\src"
-set "TB_FILE=..\tb\%MODULE%_tb.v"
+set "SRC_DIR=.\src"
+set "TB_FILE=.\tb\%MODULE%_tb.v"
 set "TOP_MODULE=%MODULE%_tb"
 set "OUT_DIR=.\.build"
 set "OUT_FILE=%OUT_DIR%\%MODULE%_tb.out"
-set "VCD_DIR=..\waveforms"
+set "VCD_DIR=.\waveforms"
 
 :: Create build directory if it doesn't exist
 if not exist "%OUT_DIR%" (
