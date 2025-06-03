@@ -13,23 +13,22 @@ module controller(
     input  wire        clk,                 // Clock signal
     input  wire        enable,              // Enable signal
     input  wire [2:0]  inst,                // Instruction signal
-    output reg        busy,                // Busy signal to indicate controller is processing
-    output reg [2:0]  current_state,       // Current state of the controller
-    output reg [2:0]  next_state,          // Next state of the controller
+    output reg         busy,                // Busy signal to indicate controller is processing
     // Sensor signals
     input  wire [7:0]  sensor_data,         // Sensor data input
-    output  reg        sensor_enable,       // Sensor enable signal
+    output reg         sensor_enable,       // Sensor enable signal
     // Memory signals
-    inout  wire [7:0]  mem_data,         // Memory data input
+    inout  wire [7:0]  mem_data,            // Memory data input
     output reg [7:0]   mem_address,         // Memory address output
     output reg         mem_write,           // Write enable signal
     output reg         mem_read,            // Read enable signal
+    input  wire        mem_data_ready,      // Memory data ready signal
     // Radio signals
     input  wire        radio_busy,          // Radio busy signal
     output reg         radio_send,          // Control signal to radio for transmit
     output reg         radio_receive,       // Control signal to radio for receive 
     inout  wire [7:0]  radio_data,          // Data received from 
-    output reg        radio_enable          // Radio enable signal
+    output reg         radio_enable         // Radio enable signal
 
 );
 
@@ -44,7 +43,7 @@ module controller(
     //reg [1:0] current_state, next_state = IDLE;
     reg [7:0] current_address = 0; // Current address for memory operations
     reg [7:0] data = 8'b0; // "Memory" data register to hold sensor data, memory data or radio data
-
+    reg [2:0] current_state = IDLE, next_state = IDLE; // Current and next state of the FSM
     assign radio_data = (radio_send && !radio_receive) ? data : 8'bz; // Tri-state output for radio data
     assign mem_data = (mem_write && !mem_read) ? data : 8'bz; // Tri-state output for memory data
      
@@ -80,8 +79,12 @@ always @(posedge clk) begin
                 busy <= 1'b1; // Indicate controller is busy
                 // Read sensor data
                 sensor_enable <= 1'b1; // Enable sensor
-                data <= sensor_data; // Read data from sensor
-                next_state <= WRITE_MEMORY; // Transition to WRITE_MEMORY state 
+                if (sensor_data !== 8'b0) begin
+                    data <= sensor_data; // Read data from sensor
+                    next_state <= WRITE_MEMORY; // Transition to WRITE_MEMORY state 
+                end else begin
+                    next_state <= READ_SENSOR; // Stay in READ_SENSOR if no data available 
+                end
             end
             
             READ_RADIO: begin
@@ -110,7 +113,6 @@ always @(posedge clk) begin
                     radio_send <= 1'b0; // Radio is busy, do not send data
                     radio_enable <= 1'b0; // Disable radio module
                     next_state <= IDLE; // Transition to IDLE state after sending
-                    busy <= 1'b0; // Indicate controller is no longer busy
                 end
             end
 
@@ -121,10 +123,9 @@ always @(posedge clk) begin
                 mem_address <= current_address; // Set memory address for read
                 mem_read <= 1'b1; // Enable memory read
                 
-                if (!mem_data) begin
+                if (mem_data_ready) begin
                     // If data is available, read it
                     mem_read <= 1'b0; // Disable memory read after reading
-                    busy <= 1'b0; // Indicate controller is no longer busy
                     next_state <= IDLE; // Transition to IDLE state
                 end else begin
                     mem_read <= 1'b0; // Disable memory read if no data available
@@ -133,6 +134,7 @@ always @(posedge clk) begin
 
             WRITE_MEMORY: begin
                 // Write to memory
+                busy <= 1'b1; // Indicate controller is busy
                 mem_address <= current_address; // Set memory address for write
                 mem_write <= 1'b1; // Enable memory write
                 current_address <= current_address + 1; // Increment address for next write
