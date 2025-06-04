@@ -5,9 +5,15 @@ module node_tb;
     reg clk = 0;
     reg rst_n = 1;
     reg enable = 0;
-    reg [2:0] inst = 3'b000;
+    reg [1:0] inst = 3'b000;
     reg [7:0] environment = 8'h00;
     wire busy;
+
+    // State encoding
+    parameter   IDLE = 2'b00, 
+                READ_SENSOR = 2'b01,
+                READ_RADIO = 2'b10,
+                WRITE_RADIO = 2'b11;
 
     // Instantiate the toplevel node
     toplevel uut (
@@ -46,37 +52,39 @@ module node_tb;
         environment = 8'h30; #10;
 
         // Issue a READ_SENSOR instruction
-        inst = 3'b001;
+        inst = READ_SENSOR;
         wait(busy == 1); // Wait for busy signal to indicate processing
-        inst = 3'b000; // Return to IDLE
+        inst = IDLE; // Return to IDLE
         wait(busy == 0); // Wait for processing to complete
         #20; // Allow some time for processing
 
-        // Issue a WRITE_MEMORY instruction
-        inst = 3'b100;
-        wait(busy == 1); // Wait for busy signal to indicate processing
-        inst = 3'b000;
-        wait(busy == 0); // Wait for processing to complete
-        #20; // Allow some time for processing
+        // // Issue a WRITE_MEMORY instruction
+        // inst = WRITE_MEMORY;
+        // wait(busy == 1); // Wait for busy signal to indicate processing
+        // inst = IDLE;
+        // wait(busy == 0); // Wait for processing to complete
+        // #20; // Allow some time for processing
 
-        // Issue a READ_MEMORY instruction
-        inst = 3'b101;
-        wait(busy == 1); // Wait for busy signal to indicate processing
-        inst = 3'b000;
-        wait(busy == 0); // Wait for processing to complete
-        #20; // Allow some time for processing
+        // // Issue a READ_MEMORY instruction
+        // inst = READ_MEMORY;
+        // wait(busy == 1); // Wait for busy signal to indicate processing
+        // inst = IDLE;
+        // wait(busy == 0); // Wait for processing to complete
+        // #20; // Allow some time for processing
 
         // Issue a WRITE_RADIO instruction
-        inst = 3'b011;
+        inst = WRITE_RADIO;
         wait(busy == 1); // Wait for busy signal to indicate processing
-        inst = 3'b000;
+        inst = IDLE;
         wait(busy == 0); // Wait for processing to complete
         #20; // Allow some time for processing
 
+        $finish;
+
         // Issue a READ_RADIO instruction
-        inst = 3'b010;
+        inst = READ_RADIO;
         wait(busy == 1); // Wait for busy signal to indicate processing
-        inst = 3'b000;
+        inst = IDLE;
         wait(busy == 0); // Wait for processing to complete
         #20; // Allow some time for processing
 

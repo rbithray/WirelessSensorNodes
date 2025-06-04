@@ -12,7 +12,7 @@
 module controller(
     input  wire        clk,                 // Clock signal
     input  wire        enable,              // Enable signal
-    input  wire [2:0]  inst,                // Instruction signal
+    input  wire [1:0]  inst,                // Instruction signal
     output reg         busy,                // Busy signal to indicate controller is processing
     // Sensor signals
     input  wire [7:0]  sensor_data,         // Sensor data input
@@ -33,10 +33,12 @@ module controller(
 );
 
     // State encoding
-    parameter   IDLE = 3'b000, 
+    parameter   // STATES AVAILABLE THROUGH INST
+                IDLE = 3'b000, 
                 READ_SENSOR = 3'b001,
                 READ_RADIO = 3'b010,
                 WRITE_RADIO = 3'b011,
+                // INTERNAL STATES
                 WRITE_MEMORY = 3'b100,
                 READ_MEMORY = 3'b101;
 
@@ -72,7 +74,7 @@ always @(posedge clk) begin
                 radio_receive <= 1'b0;
                 radio_enable <= 1'b0;
                 busy <= 1'b0; // Indicate controller is not busy
-                next_state <= inst; // set next state based on instruction
+                next_state <= 3'b0 | inst; // set next state based on instruction
             end
             
             READ_SENSOR: begin
@@ -105,6 +107,7 @@ always @(posedge clk) begin
             WRITE_RADIO: begin
                 // Write to radio
                 if (!radio_busy) begin
+                    
                     radio_receive <= 1'b0; // Disable radio receive
                     radio_send <= 1'b1; // Enable radio send
                     radio_enable <= 1'b1; // Enable radio module

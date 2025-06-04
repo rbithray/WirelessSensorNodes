@@ -18,7 +18,7 @@ module toplevel(
     input  wire        rst_n,
     input  wire [7:0]  environment, // External environment input for sensor
     input  wire        enable,      // Global enable
-    input  wire [2:0]  inst,        // Instruction signal for controller
+    input  wire [1:0]  inst,        // Instruction signal for controller
     output wire        busy         // Busy signal to indicate controller is processing
 );
 
